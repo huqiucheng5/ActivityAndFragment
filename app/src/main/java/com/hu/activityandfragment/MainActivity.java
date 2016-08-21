@@ -1,14 +1,17 @@
 package com.hu.activityandfragment;
 
+import android.app.Fragment;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Android4MainActivity";
+    android.app.FragmentManager manager = getFragmentManager();
+    android.app.FragmentTransaction transaction = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +23,38 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, SecondActivity.class));
+            }
+        });
+        findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                transaction = manager.beginTransaction();
+                transaction.add(R.id.container, new MyFragment(), "MyFragment");
+                transaction.commit();
+
+            }
+        });
+        findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                transaction = manager.beginTransaction();
+//                Fragment fragment = manager.findFragmentByTag("MyFragment");
+                Fragment fragment = manager.findFragmentById(R.id.container);
+                transaction.remove(fragment);
+                transaction.commit();
+
+            }
+        });
+        findViewById(R.id.button4).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                transaction = manager.beginTransaction();
+                transaction.replace(R.id.container, new SecondFragment());
+                transaction.commit();
+
             }
         });
     }
